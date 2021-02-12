@@ -58,15 +58,16 @@ namespace UserRegistrationLambda
                 }
             }
 
+
+
             catch (UserRegistrationTestCustomException exception)
             {
                 throw exception;
             }
             return "FirstName is not valid";
-
-
-
         }
+
+
 
     }
 }
