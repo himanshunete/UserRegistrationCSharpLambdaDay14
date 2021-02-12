@@ -31,6 +31,23 @@ namespace NUnitTestProject
             }
         }
 
+        /// <summary>
+        /// TC-2 Throw Custom Exception for Invalid LastName
+        /// </summary>
+        [TestCase("Nete")]
+        [TestCase("Ka")]
+        public void Given_LastName_Expecting_ThrowCustomException(string lastName)
+        {
+            string actual = " ";
+            try
+            {
+                actual = userRegistration.LastNameLambda(lastName);
+            }
+            catch (UserRegistrationTestCustomException exception)
+            {
+                Assert.AreEqual("LastName should contains atleast three characters", exception.Message);
+            }
+        }
 
     }
 }
