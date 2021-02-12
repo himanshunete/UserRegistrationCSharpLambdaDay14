@@ -17,6 +17,7 @@ namespace UserRegistrationLambda
         public bool FirstName(string patternFirstName) => Regex.IsMatch(patternFirstName, firstNamePattern);
         public bool LastName(string patternLastName) => Regex.IsMatch(patternLastName, lastNamePattern);
         public bool MobileNumber(string patternMobileNumber) => Regex.IsMatch(patternMobileNumber, mobileNumberPattern);
+        public bool Password(string patternPassword) => Regex.IsMatch(patternPassword, passwordPattern);
 
 
 
@@ -162,6 +163,54 @@ namespace UserRegistrationLambda
                 throw exception;
             }
             return "MobileNumber is not valid";
+        }
+
+        /// <summary>
+        /// Password Custom Exception
+        /// </summary>
+        /// <param name="patternPassword"></param>
+        /// <returns></returns>
+        public string PasswordLambda(string patternPassword)
+        {
+            bool result = Password(patternPassword);
+            try
+            {
+                if (result == false)
+                {
+
+                    if (patternPassword.Equals(string.Empty))
+                    {
+                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_EMPTY, "Password should not be empty");
+                    }
+
+
+                    if (patternPassword.Length < 3)
+                    {
+                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_LESSTHAN_MINIMUM_LENGTH, "Password should contains atleast three characters");
+
+                    }
+
+                    if (patternPassword.Any(char.IsDigit))
+                    {
+                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_NUMBER, "Password should not contains number");
+                    }
+                    if (!char.IsUpper(patternPassword[0]))
+                    {
+                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_LOWERCASE, "Password first letter should not be a lowercase");
+                    }
+                    if (patternPassword.Any(char.IsLetterOrDigit))
+                    {
+                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_SPECIAL_CHARACTER, "Password should not contains special characters");
+                    }
+
+                }
+            }
+
+            catch (UserRegistrationTestCustomException exception)
+            {
+                throw exception;
+            }
+            return "Password is not valid";
         }
 
 
