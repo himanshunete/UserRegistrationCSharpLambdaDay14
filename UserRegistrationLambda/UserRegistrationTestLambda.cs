@@ -57,6 +57,7 @@ namespace UserRegistrationLambda
 
                 }
             }
+
             catch (UserRegistrationTestCustomException exception)
             {
                 throw exception;
