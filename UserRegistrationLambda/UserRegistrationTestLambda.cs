@@ -16,6 +16,7 @@ namespace UserRegistrationLambda
 
         public bool FirstName(string patternFirstName) => Regex.IsMatch(patternFirstName, firstNamePattern);
         public bool LastName(string patternLastName) => Regex.IsMatch(patternLastName, lastNamePattern);
+        public bool MobileNumber(string patternMobileNumber) => Regex.IsMatch(patternMobileNumber, mobileNumberPattern);
 
 
 
@@ -113,6 +114,54 @@ namespace UserRegistrationLambda
                 throw exception;
             }
             return "LastName is not valid";
+        }
+
+        /// <summary>
+        /// MobileNumber Custom Exception
+        /// </summary>
+        /// <param name="patternMobileNumber"></param>
+        /// <returns></returns>
+        public string MobileNumberLambda(string patternMobileNumber)
+        {
+            bool result = MobileNumber(patternMobileNumber);
+            try
+            {
+                if (result == false)
+                {
+
+                    if (patternMobileNumber.Equals(string.Empty))
+                    {
+                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_EMPTY, "MobileNumber should not be empty");
+                    }
+
+
+                    if (patternMobileNumber.Length < 3)
+                    {
+                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_LESSTHAN_MINIMUM_LENGTH, "MobileNumber should contains atleast three characters");
+
+                    }
+
+                    if (patternMobileNumber.Any(char.IsDigit))
+                    {
+                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_NUMBER, "MobileNumber should not contains number");
+                    }
+                    if (!char.IsUpper(patternMobileNumber[0]))
+                    {
+                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_LOWERCASE, "MobileNumber first letter should not be a lowercase");
+                    }
+                    if (patternMobileNumber.Any(char.IsLetterOrDigit))
+                    {
+                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_SPECIAL_CHARACTER, "MobileNumber should not contains special characters");
+                    }
+
+                }
+            }
+
+            catch (UserRegistrationTestCustomException exception)
+            {
+                throw exception;
+            }
+            return "MobileNumber is not valid";
         }
 
 
