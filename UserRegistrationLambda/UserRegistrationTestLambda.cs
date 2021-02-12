@@ -18,7 +18,7 @@ namespace UserRegistrationLambda
         public bool LastName(string patternLastName) => Regex.IsMatch(patternLastName, lastNamePattern);
         public bool MobileNumber(string patternMobileNumber) => Regex.IsMatch(patternMobileNumber, mobileNumberPattern);
         public bool Password(string patternPassword) => Regex.IsMatch(patternPassword, passwordPattern);
-
+        public bool Email(string patternEmail) => Regex.IsMatch(patternEmail, emailPattern);
 
 
         /// <summary>
@@ -136,20 +136,17 @@ namespace UserRegistrationLambda
                     }
 
 
-                    if (patternMobileNumber.Length < 3)
+                    if (patternMobileNumber.Length < 13)
                     {
-                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_LESSTHAN_MINIMUM_LENGTH, "MobileNumber should contains atleast three characters");
+                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_LESSTHAN_MINIMUM_LENGTH, "MobileNumber should contains thirteen characters");
 
                     }
 
-                    if (patternMobileNumber.Any(char.IsDigit))
+                    if (patternMobileNumber.Any(char.IsLetter))
                     {
-                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_NUMBER, "MobileNumber should not contains number");
+                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_NUMBER, "MobileNumber should not contains letters");
                     }
-                    if (!char.IsUpper(patternMobileNumber[0]))
-                    {
-                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_LOWERCASE, "MobileNumber first letter should not be a lowercase");
-                    }
+                   
                     if (patternMobileNumber.Any(char.IsLetterOrDigit))
                     {
                         throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_SPECIAL_CHARACTER, "MobileNumber should not contains special characters");
@@ -184,23 +181,23 @@ namespace UserRegistrationLambda
                     }
 
 
-                    if (patternPassword.Length < 3)
+                    if (patternPassword.Length < 8)
                     {
-                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_LESSTHAN_MINIMUM_LENGTH, "Password should contains atleast three characters");
+                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_LESSTHAN_MINIMUM_LENGTH, "Password should contains atleast eight characters");
 
                     }
 
-                    if (patternPassword.Any(char.IsDigit))
+                    if (!patternPassword.Any(char.IsDigit))
                     {
-                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_NUMBER, "Password should not contains number");
+                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_NUMBER, "Password should contains number");
                     }
                     if (!char.IsUpper(patternPassword[0]))
                     {
                         throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_LOWERCASE, "Password first letter should not be a lowercase");
                     }
-                    if (patternPassword.Any(char.IsLetterOrDigit))
+                    if (!patternPassword.Any(char.IsLetterOrDigit))
                     {
-                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_SPECIAL_CHARACTER, "Password should not contains special characters");
+                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_SPECIAL_CHARACTER, "Password should contains special characters");
                     }
 
                 }
@@ -211,6 +208,38 @@ namespace UserRegistrationLambda
                 throw exception;
             }
             return "Password is not valid";
+        }
+
+        /// <summary>
+        /// Email Custom Exception
+        /// </summary>
+        /// <param name="patternEmail"></param>
+        /// <returns></returns>
+        public string EmailLambda(string patternEmail)
+        {
+            bool result = Password(patternEmail);
+            try
+            {
+                if (result == false)
+                {
+
+                    if (patternEmail.Equals(string.Empty))
+                    {
+                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_EMPTY, "Email should not be empty");
+                    }
+                    if (patternEmail.Any(char.IsLetterOrDigit) == null)
+                    {
+                        throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_SPECIAL_CHARACTER, "Email should contains special characters");
+                    }
+
+                }
+            }
+
+            catch (UserRegistrationTestCustomException exception)
+            {
+                throw exception;
+            }
+            return "Email is not valid";
         }
 
 
