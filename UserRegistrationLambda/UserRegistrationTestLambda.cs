@@ -227,7 +227,7 @@ namespace UserRegistrationLambda
                     {
                         throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_EMPTY, "Email should not be empty");
                     }
-                    if (patternEmail.Any(char.IsLetterOrDigit) == null)
+                    if (!patternEmail.Any(char.IsLetterOrDigit))
                     {
                         throw new UserRegistrationTestCustomException(UserRegistrationTestCustomException.ExceptionType.USER_ENTERED_SPECIAL_CHARACTER, "Email should contains special characters");
                     }
